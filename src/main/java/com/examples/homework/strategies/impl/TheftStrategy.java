@@ -26,11 +26,16 @@ public class TheftStrategy implements Strategy {
                 .collect(Collectors.summingDouble(Double::doubleValue));
 
         Double unroundedValue;
+        if (totalInsuredSum >=0) {
         if(totalInsuredSum >= SUM_INSURED_THRESHOLD){
             unroundedValue = totalInsuredSum * MAX_COEFFICENT;
         }else{
             unroundedValue = totalInsuredSum * DEFAULT_COEFFICENT;
         }
+        }else{
+            unroundedValue = 0.00;
+        }
+
 
         BigDecimal bd = new BigDecimal(Double.toString(unroundedValue));
         bd = bd.setScale(2, RoundingMode.HALF_UP);

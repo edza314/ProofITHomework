@@ -16,29 +16,31 @@ import java.util.stream.Collectors;
 @Service
 public class PremiumCalculator implements Calculator {
 
-
     @Override
     public PolicyResponse calculate(PolicyRequest request) {
 
         PolicyResponse response = new PolicyResponse();
+        try {
 
-        List<PolicySubObject> policySubObjects =
-                request.getPolicy().getPolicyObjects()
-                        .stream()
-                        .filter(i -> i.getPolicySubObjects().size() > 0)
-                        .flatMap(i -> i.getPolicySubObjects().stream())
-                        .collect(Collectors.toList());
+            List<PolicySubObject> policySubObjects =
+                    request.getPolicy().getPolicyObjects()
+                            .stream()
+                            .filter(i -> i.getPolicySubObjects().size() > 0)
+                            .flatMap(i -> i.getPolicySubObjects().stream())
+                            .collect(Collectors.toList());
 
-        Strategy strategy = new FireStrategy();
-        Double premiumFire = strategy.calculateValue(policySubObjects);
-        strategy = new TheftStrategy();
-        Double premiumTheft = strategy.calculateValue(policySubObjects);
+            Strategy strategy = new FireStrategy();
+            Double premiumFire = strategy.calculateValue(policySubObjects);
+            strategy = new TheftStrategy();
+            Double premiumTheft = strategy.calculateValue(policySubObjects);
 
-        response.setPremium(premiumFire + premiumTheft);
+            response.setPremium(premiumFire + premiumTheft);
+        } catch (Exception e) {
+            e.getMessage();
+        }
 
         return response;
     }
-
 
 
 }
