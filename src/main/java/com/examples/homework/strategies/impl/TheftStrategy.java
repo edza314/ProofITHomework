@@ -8,37 +8,37 @@ import com.examples.homework.strategies.Strategy;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TheftStrategy implements Strategy {
-    private static final Double DEFAULT_COEFFICENT = 0.11;
-    private static final Double MAX_COEFFICENT = 0.05;
-    private static final Double SUM_INSURED_THRESHOLD = 15.0;
+    private static final BigDecimal DEFAULT_COEFFICIENT = new BigDecimal(0.11);
+    private static final BigDecimal MAX_COEFFICIENT = new BigDecimal(0.05);
+    private static final BigDecimal SUM_INSURED_THRESHOLD = new BigDecimal(15.0);
     private static final RiskType RISK_TYPE = RiskType.THEFT;
 
-
     @Override
-    public Double calculateValue(List<PolicySubObject> subobjects) {
-        Double totalInsuredSum = subobjects
+    public BigDecimal calculateValue(List<PolicySubObject> subObjects) {
+        BigDecimal totalInsuredSum = subObjects
                 .stream()
                 .filter(i -> i.getRiskType() == RISK_TYPE)
-                .map(i -> i.getSumInsured())
-                .collect(Collectors.summingDouble(Double::doubleValue));
+                .map(PolicySubObject::getSumInsured)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Double unroundedValue;
-        if (totalInsuredSum >=0) {
-        if(totalInsuredSum >= SUM_INSURED_THRESHOLD){
-            unroundedValue = totalInsuredSum * MAX_COEFFICENT;
-        }else{
-            unroundedValue = totalInsuredSum * DEFAULT_COEFFICENT;
-        }
-        }else{
-            unroundedValue = 0.00;
-        }
-
-
-        BigDecimal bd = new BigDecimal(Double.toString(unroundedValue));
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        totalInsuredSum = calculateBasedOnCoefficient(totalInsuredSum);
+        return doRounding(totalInsuredSum);
     }
+
+    @Override
+    public BigDecimal calculateBasedOnCoefficient(BigDecimal value) {
+        return value.compareTo(SUM_INSURED_THRESHOLD) > 0 ? value.multiply(MAX_COEFFICIENT) : value.multiply(DEFAULT_COEFFICIENT);
+    }
+
+    @Override
+    public BigDecimal doRounding(BigDecimal value) {
+
+        //return value.setScale(2, RoundingMode.HALF_UP);
+        return value.compareTo(BigDecimal.ZERO) > 0 ? value.setScale(2, RoundingMode.HALF_UP) : BigDecimal.valueOf(0.00);
+    }
+
 }
+
+

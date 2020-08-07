@@ -1,7 +1,7 @@
 package com.examples.homework.controller.api;
 
 public class PolicyRequest {
-    Policy policy;
+    private Policy policy;
 
     public Policy getPolicy() {
         return policy;

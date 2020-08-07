@@ -5,16 +5,17 @@ import com.examples.homework.enums.RiskType;
 import com.examples.homework.service.impl.PremiumCalculator;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-
-class
-HomeworkUnitTests {
+class HomeworkUnitTests {
 
     // Homework example 1
     @Test
-    public void calculatePremiumTest1() {
-        Double expectedPremium = 2.28;
+    void calculatePremiumTest1() {
+        BigDecimal expectedPremium = BigDecimal.valueOf(2.28);
 
         PremiumCalculator calculator = new PremiumCalculator();
 
@@ -30,11 +31,11 @@ HomeworkUnitTests {
 
         PolicySubObject policySubObject1 = new PolicySubObject();
         policySubObject1.setRiskType(RiskType.FIRE);
-        policySubObject1.setSumInsured(100.00);
+        policySubObject1.setSumInsured(BigDecimal.valueOf(100.00));
 
         PolicySubObject policySubObject2 = new PolicySubObject();
         policySubObject2.setRiskType(RiskType.THEFT);
-        policySubObject2.setSumInsured(8.00);
+        policySubObject2.setSumInsured(BigDecimal.valueOf(8.00));
 
         policyObject.getPolicySubObjects().add(policySubObject1);
         policyObject.getPolicySubObjects().add(policySubObject2);
@@ -46,9 +47,8 @@ HomeworkUnitTests {
 
     // Homework example 2
     @Test
-    public void calculatePremiumTest2() {
-        Double expectedPremium = 17.13;
-
+    void calculatePremiumTest2() {
+        BigDecimal expectedPremium = BigDecimal.valueOf(17.13);
         PremiumCalculator calculator = new PremiumCalculator();
 
         PolicyRequest request = new PolicyRequest();
@@ -63,11 +63,11 @@ HomeworkUnitTests {
 
         PolicySubObject policySubObject1 = new PolicySubObject();
         policySubObject1.setRiskType(RiskType.FIRE);
-        policySubObject1.setSumInsured(500.00);
+        policySubObject1.setSumInsured(BigDecimal.valueOf(500.00));
 
         PolicySubObject policySubObject2 = new PolicySubObject();
         policySubObject2.setRiskType(RiskType.THEFT);
-        policySubObject2.setSumInsured(102.51);
+        policySubObject2.setSumInsured(BigDecimal.valueOf(102.51));
 
         policyObject.getPolicySubObjects().add(policySubObject1);
         policyObject.getPolicySubObjects().add(policySubObject2);
@@ -77,11 +77,11 @@ HomeworkUnitTests {
         assertEquals(expectedPremium, response.getPremium());
     }
 
-    @Test
     // Negative value
-    public void calculatePremiumTest3() {
-        Double expectedPremium = 0.00;
+    @Test
+    void calculatePremiumTest3() {
 
+        BigDecimal expectedPremium = BigDecimal.valueOf(0.00);
         PremiumCalculator calculator = new PremiumCalculator();
 
         PolicyRequest request = new PolicyRequest();
@@ -96,11 +96,11 @@ HomeworkUnitTests {
 
         PolicySubObject policySubObject1 = new PolicySubObject();
         policySubObject1.setRiskType(RiskType.FIRE);
-        policySubObject1.setSumInsured(-500.00);
+        policySubObject1.setSumInsured(BigDecimal.valueOf(-500.00));
 
         PolicySubObject policySubObject2 = new PolicySubObject();
         policySubObject2.setRiskType(RiskType.THEFT);
-        policySubObject2.setSumInsured(-102.51);
+        policySubObject2.setSumInsured(BigDecimal.valueOf(-102.51));
 
         policyObject.getPolicySubObjects().add(policySubObject1);
         policyObject.getPolicySubObjects().add(policySubObject2);
@@ -109,12 +109,10 @@ HomeworkUnitTests {
 
         assertEquals(expectedPremium, response.getPremium());
     }
-
-    @Test
 
     // Do not have policy object
-    public void calculatePremiumTest4() {
-        String expectedPremium = (null);
+    @Test
+    void calculatePremiumTest4() {
         PremiumCalculator calculator = new PremiumCalculator();
 
         PolicyRequest request = new PolicyRequest();
@@ -134,14 +132,13 @@ HomeworkUnitTests {
 
         PolicyResponse response = calculator.calculate(request);
 
-        assertEquals(expectedPremium, response.getPremium());
+        assertNull(response.getPremium());
     }
 
-    @Test
     // Do not have policy subObjects
-    public void calculatePremiumTest5() {
-        Double expectedPremium = 0.00;
-
+    @Test
+    void calculatePremiumTest5() {
+        BigDecimal expectedPremium = BigDecimal.valueOf(0.00);
         PremiumCalculator calculator = new PremiumCalculator();
 
         PolicyRequest request = new PolicyRequest();

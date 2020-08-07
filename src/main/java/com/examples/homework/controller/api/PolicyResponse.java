@@ -1,13 +1,15 @@
 package com.examples.homework.controller.api;
 
-public class PolicyResponse {
-    Double premium;
+        import java.math.BigDecimal;
 
-    public Double getPremium() {
+public class PolicyResponse {
+    private BigDecimal premium;
+
+    public BigDecimal getPremium() {
         return premium;
     }
 
-    public void setPremium(Double premium) {
+    public void setPremium(BigDecimal premium) {
         this.premium = premium;
     }
 }
